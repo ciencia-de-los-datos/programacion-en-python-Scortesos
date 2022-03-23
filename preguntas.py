@@ -12,6 +12,9 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 """
 
+file = open('data.csv', 'r').readlines()
+file = [e.replace('\n', '') for e in file]
+file = [e.split('\t') for e in file]
 
 def pregunta_01():
     """
@@ -21,7 +24,7 @@ def pregunta_01():
     214
 
     """
-    return
+    return sum([int(row[1]) for row in file])
 
 
 def pregunta_02():
@@ -39,7 +42,14 @@ def pregunta_02():
     ]
 
     """
-    return
+    d = {}
+    for letter in sorted([row[0] for row in file]):
+        if letter in d.keys():
+            d[letter] += 1
+        else:
+            d[letter] = 1
+    
+    return list(d.items())
 
 
 def pregunta_03():
@@ -57,7 +67,16 @@ def pregunta_03():
     ]
 
     """
-    return
+    d = {}
+    for row in file:
+        if row[0] in d.keys():
+            d[row[0]] += int(row[1])
+        else:
+            d[row[0]] = int(row[1])
+
+    result = list(d.items())
+
+    return sorted(result, key=lambda tup: tup[0])
 
 
 def pregunta_04():
@@ -82,7 +101,14 @@ def pregunta_04():
     ]
 
     """
-    return
+    d = {}
+    for month in sorted([row[2].split('-')[1] for row in file]):
+        if month in d.keys():
+            d[month] += 1
+        else:
+            d[month] = 1
+    
+    return list(d.items())
 
 
 def pregunta_05():
@@ -100,7 +126,15 @@ def pregunta_05():
     ]
 
     """
-    return
+    d = {}
+    for row in file:
+        if row[0] in d.keys():
+            d[row[0]].append(int(row[1]))
+        else:
+            d[row[0]] = [int(row[1])]
+    result = [(key, max(d[key]), min(d[key])) for key in d.keys()]
+    
+    return sorted(result, key=lambda tup: tup[0])
 
 
 def pregunta_06():
@@ -125,7 +159,18 @@ def pregunta_06():
     ]
 
     """
-    return
+    lst = []
+    for e in [row[4].split(',') for row in file]:
+        lst.extend(e)
+    d = {}
+    for e in lst:
+        if e.split(':')[0] in d.keys():
+            d[e.split(':')[0]].append(int(e.split(':')[1]))
+        else: 
+            d[e.split(':')[0]] = [int(e.split(':')[1])]
+    result = [(key, min(d[key]), max(d[key])) for key in d.keys()]
+    
+    return sorted(result, key=lambda tup: tup[0])
 
 
 def pregunta_07():
@@ -149,7 +194,15 @@ def pregunta_07():
     ]
 
     """
-    return
+    d = {}
+    for row in file:
+        if int(row[1]) in d.keys():
+            d[int(row[1])].append(row[0])
+        else: 
+            d[int(row[1])] = [row[0]]
+    result = list(d.items())
+
+    return sorted(result, key=lambda tup: tup[0])
 
 
 def pregunta_08():
@@ -174,7 +227,17 @@ def pregunta_08():
     ]
 
     """
-    return
+    d = {}
+    for row in file:
+        if int(row[1]) in d.keys():
+            d[int(row[1])].append(row[0])
+        else: 
+            d[int(row[1])] = [row[0]]
+    result = list(d.items())
+    result = sorted(result, key=lambda tup: tup[0])
+    result = [(e[0], sorted(list(set(e[1])))) for e in result]
+
+    return result
 
 
 def pregunta_09():
@@ -197,7 +260,20 @@ def pregunta_09():
     }
 
     """
-    return
+    lst = []
+    for e in [row[4].split(',') for row in file]:
+        lst.extend(e)
+
+    lst = [e.split(':')[0] for e in lst]
+
+    d = {}
+    for key in sorted(lst):
+        if key in d.keys():
+            d[key] += 1
+        else:
+            d[key] = 1
+
+    return dict(list(d.items()))
 
 
 def pregunta_10():
@@ -218,7 +294,11 @@ def pregunta_10():
 
 
     """
-    return
+    lst = []
+    for row in file:
+        lst.append((row[0], len(row[3].split(',')), len(row[4].split(',')))) 
+    
+    return lst
 
 
 def pregunta_11():
@@ -239,7 +319,17 @@ def pregunta_11():
 
 
     """
-    return
+    d = {}
+    for row in file:
+        for letter in row[3].split(','):
+            if letter in d.keys():
+                d[letter] += int(row[1])
+            else:
+                d[letter] = int(row[1])
+
+    result = list(d.items())
+    
+    return dict(sorted(result, key=lambda tup: tup[0]))
 
 
 def pregunta_12():
@@ -257,4 +347,13 @@ def pregunta_12():
     }
 
     """
-    return
+    d = {}
+    for row in file:
+        row_5 = row[4].split(',')
+        if row[0] in d.keys():
+            d[row[0]] += sum([int(e.split(':')[1]) for e in row_5])
+        else:
+            d[row[0]] = sum([int(e.split(':')[1]) for e in row_5])
+    result = list(d.items())
+    
+    return dict(sorted(result, key=lambda tup: tup[0]))
