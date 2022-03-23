@@ -347,4 +347,13 @@ def pregunta_12():
     }
 
     """
-    return
+    d = {}
+    for row in file:
+        row_5 = row[4].split(',')
+        if row[0] in d.keys():
+            d[row[0]] += sum([int(e.split(':')[1]) for e in row_5])
+        else:
+            d[row[0]] = sum([int(e.split(':')[1]) for e in row_5])
+    result = list(d.items())
+    
+    return dict(sorted(result, key=lambda tup: tup[0]))
